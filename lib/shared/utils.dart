@@ -11,6 +11,14 @@ String formatDate(HotelSearchRepository hotelSearchRepository) {
       ' - ${hotelSearchRepository.endDate?.day} ${formatMonthNumberToString(hotelSearchRepository.endDate?.month)}';
 }
 
+String formatDateWithDates(DateTime date) {
+  return '${date.year}-${date.month}-${date.day}';
+}
+
+String parseDates(DateTime startDate, DateTime endDate) {
+  return '${startDate.day} ${formatMonthNumberToString(startDate.month)} - ${endDate.day} ${formatMonthNumberToString(endDate.month)}';
+}
+
 String formatMonthNumberToString(int? number) {
   switch (number) {
     case 1:

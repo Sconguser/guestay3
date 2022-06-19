@@ -23,8 +23,8 @@ class BookingConfirmationNavigator extends StatelessWidget {
           return Navigator(
             pages: [
               MaterialPage(child: BookingConfirmationView()),
-              if (state == BookingConfirmationNavigatorState.defaultView)
-                MaterialPage(child: BookingConfirmationView()),
+              // if (state == BookingConfirmationNavigatorState.defaultView)
+              //   MaterialPage(child: BookingConfirmationView()),
               if (state ==
                   BookingConfirmationNavigatorState.congratulationsView)
                 MaterialPage(child: CongratulationsNavigator()),

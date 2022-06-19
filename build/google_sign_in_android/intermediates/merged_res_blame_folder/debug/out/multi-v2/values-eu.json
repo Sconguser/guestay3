@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Mioszek\\OneDrive\\Pulpit\\guestay\\build\\google_sign_in_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-eu\\values-eu.xml",
+            "outputFile": "C:\\Users\\Mioszek\\OneDrive\\Pulpit\\guestay3\\guestay\\build\\google_sign_in_android\\intermediates\\res\\merged\\debug\\values-eu\\values-eu.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Mioszek\\.gradle\\caches\\transforms-2\\files-2.1\\642cc9e2632e586d1058ed231591ead4\\jetified-play-services-base-18.0.1\\res\\values-eu\\values.xml",
@@ -57,7 +57,7 @@
             ]
         },
         {
-            "outputFile": "C:\\Users\\Mioszek\\OneDrive\\Pulpit\\guestay\\build\\google_sign_in_android\\intermediates\\res\\merged\\debug\\values-eu\\values-eu.xml",
+            "outputFile": "C:\\Users\\Mioszek\\OneDrive\\Pulpit\\guestay3\\guestay\\build\\google_sign_in_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-eu\\values-eu.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Mioszek\\.gradle\\caches\\transforms-2\\files-2.1\\642cc9e2632e586d1058ed231591ead4\\jetified-play-services-base-18.0.1\\res\\values-eu\\values.xml",

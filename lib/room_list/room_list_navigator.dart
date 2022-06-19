@@ -29,8 +29,8 @@ class RoomListNavigator extends StatelessWidget {
           return Navigator(
             pages: [
               MaterialPage(child: RoomListView()),
-              if (state == RoomListNavigatorState.defaultView)
-                MaterialPage(child: RoomListView()),
+              // if (state == RoomListNavigatorState.defaultView)
+              //   MaterialPage(child: RoomListView()),
               if (state == RoomListNavigatorState.paymentChoiceView)
                 MaterialPage(child: PaymentChoiceNavigator()),
             ],

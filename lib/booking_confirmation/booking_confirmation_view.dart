@@ -5,11 +5,13 @@ import 'package:guestay/booking_confirmation/booking_confirmation_event.dart';
 import 'package:guestay/booking_confirmation/booking_confirmation_navigator_cubit.dart';
 import 'package:guestay/booking_confirmation/draft_reservation_repository.dart';
 import 'package:guestay/hotel_search/hotel_search_repository.dart';
+import 'package:guestay/shared/appbar.dart';
 import 'package:guestay/shared/constants/background.dart';
 import 'package:guestay/shared/divider.dart';
 import 'package:guestay/user_reservations/reservation_repository.dart';
 
 import '../shared/constants/colours.dart';
+import '../shared/spinner.dart';
 import '../shared/utils.dart';
 import 'booking_confirmation_bloc.dart';
 import 'booking_confirmation_state.dart';
@@ -20,17 +22,17 @@ class BookingConfirmationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black54,
-          ),
-        ),
-      ),
+      // appBar: AppBar(
+      //   leading: InkWell(
+      //     onTap: () {
+      //       Navigator.pop(context);
+      //     },
+      //     child: Icon(
+      //       Icons.arrow_back_ios,
+      //       color: Colors.black54,
+      //     ),
+      //   ),
+      // ),
       body: BlocProvider(
         create: (context) => BookingConfirmationBloc(
           draftReservationRepository:
@@ -40,13 +42,16 @@ class BookingConfirmationView extends StatelessWidget {
         )..add(CreateDraftReservation(
             startDate: context.read<DraftReservationRepository>().startDate!,
             endDate: context.read<DraftReservationRepository>().endDate!,
-            id: context.read<DraftReservationRepository>().roomId!)),
+            id: context.read<DraftReservationRepository>().roomId!,
+          )),
         child: Container(
           width: 1000,
           decoration: backgroundDecoration,
-          padding: EdgeInsets.fromLTRB(0, 80, 0, 0),
+          padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
           child: Column(
             children: [
+              containerAppBar(context, 'Booking summary', true),
+              textFieldDivider,
               // chosenRoomTile(context),
               // chosenDatesTile(context),
               // paymentSummaryTile(context),
@@ -67,7 +72,7 @@ class BookingConfirmationView extends StatelessWidget {
     return BlocBuilder<BookingConfirmationBloc, BookingConfirmationState>(
         builder: (context, state) {
       return state.isDraftBeingCreated
-          ? CircularProgressIndicator()
+          ? defaultGuestaySpinner()
           : Column(
               children: [
                 chosenRoomTile(state),
@@ -85,6 +90,7 @@ class BookingConfirmationView extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Container(
+          padding: EdgeInsets.all(5),
           // color: gradientPrimaryColor,
           width: 370,
           height: 150,
@@ -114,11 +120,14 @@ class BookingConfirmationView extends StatelessWidget {
                   ),
                 ],
               ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                  width: 210,
-                  child: Image.asset('assets/images/standard_economy_room.jpg'),
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    width: 210,
+                    child: Image.asset(
+                        'assets/images/${state.hotelSearchRepository.selectedRoom!.roomAttributes!.name!.toLowerCase()}.jpg'),
+                  ),
                 ),
               ),
             ],
@@ -136,6 +145,7 @@ class BookingConfirmationView extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: Container(
+          padding: EdgeInsets.all(5),
           width: 370,
           height: 100,
           child: Column(
@@ -167,65 +177,68 @@ class BookingConfirmationView extends StatelessWidget {
         context.read<HotelSearchRepository>();
     return Card(
       color: primaryColor,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '${state.draftReservation!.numberOfDays} nights',
-                    style: TextStyle(
-                      fontSize: 20,
+      child: Container(
+        width: 370,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${state.draftReservation!.numberOfDays} nights',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '${state.draftReservation!.numberOfDays! * state.draftReservation!.pricePerDay!} zł',
-                    style: TextStyle(
-                      fontSize: 20,
+                    Text(
+                      '${state.draftReservation!.numberOfDays! * state.draftReservation!.pricePerDay!} zł',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '+ Services (taxes & fees)',
-                    style: TextStyle(
-                      fontSize: 20,
+                  ],
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '+ Services (taxes & fees)',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              textFieldDivider,
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Total',
-                    style: TextStyle(
-                      fontSize: 20,
+                  ],
+                ),
+                SizedBox(height: 20),
+                textFieldDivider,
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '${state.draftReservation!.finalPrice} zł',
-                    style: TextStyle(
-                      fontSize: 20,
+                    Text(
+                      '${state.draftReservation!.finalPrice} zł',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-            ],
+                  ],
+                ),
+                SizedBox(height: 10),
+              ],
+            ),
           ),
         ),
       ),
@@ -240,6 +253,7 @@ class BookingConfirmationView extends StatelessWidget {
     return Card(
       color: primaryColor,
       child: Container(
+        width: 370,
         child: Row(
           children: [
             Icon(
@@ -263,7 +277,7 @@ class BookingConfirmationView extends StatelessWidget {
       return ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: SizedBox(
-          width: 400,
+          width: 370,
           height: 50,
           child: ElevatedButton(
               style:
@@ -284,20 +298,23 @@ class BookingConfirmationView extends StatelessWidget {
   }
 
   void _confirmBookingButtonPressed(
-      BuildContext context, BookingConfirmationState state) {
+      BuildContext context, BookingConfirmationState state) async {
     BookingConfirmationNavigatorCubit _cubit =
         context.read<BookingConfirmationNavigatorCubit>();
     // _cubit.confirmBooking();
-    context.read<ReservationRepository>().createReservation(
+    await context.read<ReservationRepository>().createReservation(
         state.draftReservation!.id!,
         HotelSearchRepository.paymentTypeToString(
             state.hotelSearchRepository.paymentType!),
         state.draftReservation!.finalPrice!.round(),
         context.read<AuthRepository>().user.bearerToken!);
     _cubit.showCongratulations();
+    context
+        .read<ReservationRepository>()
+        .getUserReservations(context.read<AuthRepository>().user.bearerToken!);
   }
 
-  String parseDates(DateTime startDate, DateTime endDate) {
-    return '${startDate.day} ${formatMonthNumberToString(startDate.month)} - ${endDate.day} ${formatMonthNumberToString(endDate.month)}';
-  }
+  // String parseDates(DateTime startDate, DateTime endDate) {
+  //   return '${startDate.day} ${formatMonthNumberToString(startDate.month)} - ${endDate.day} ${formatMonthNumberToString(endDate.month)}';
+  // }
 }

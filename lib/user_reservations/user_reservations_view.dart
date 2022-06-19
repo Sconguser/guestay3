@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guestay/shared/appbar.dart';
 import 'package:guestay/shared/constants/background.dart';
+import 'package:guestay/shared/divider.dart';
+import 'package:guestay/shared/utils.dart';
 import 'package:guestay/user_reservations/reservation_bloc.dart';
 import 'package:guestay/user_reservations/reservation_event.dart';
 import 'package:guestay/user_reservations/reservation_repository.dart';
 import 'package:guestay/user_reservations/reservation_state.dart';
 
 import '../auth/auth_repository.dart';
+import '../shared/spinner.dart';
 
 class UserReservationsView extends StatelessWidget {
   const UserReservationsView({Key? key}) : super(key: key);
@@ -22,15 +26,14 @@ class UserReservationsView extends StatelessWidget {
         child: Container(
           decoration: backgroundDecoration,
           width: 1000,
-          padding: EdgeInsets.fromLTRB(0, 80, 0, 0),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                reservationList(),
-              ],
-            ),
+          padding: EdgeInsets.fromLTRB(15, 50, 15, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              containerAppBar(context, 'Your reservations', false),
+              textFieldDivider,
+              reservationList(),
+            ],
           ),
         ),
       ),
@@ -41,8 +44,8 @@ class UserReservationsView extends StatelessWidget {
     return BlocBuilder<ReservationBloc, ReservationState>(
         builder: (context, state) {
       return state.isReservationListLoading
-          ? CircularProgressIndicator()
-          : SizedBox(height: 490, child: reservationBuilder());
+          ? defaultGuestaySpinner()
+          : SizedBox(height: 670, child: reservationBuilder());
     });
   }
 
@@ -76,14 +79,33 @@ class UserReservationsView extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Center(
-                    child: Column(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(context
-                            .read<ReservationRepository>()
-                            .reservationList
-                            .elementAt(index)
-                            .roomName!),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(context
+                                .read<ReservationRepository>()
+                                .reservationList
+                                .elementAt(index)
+                                .roomName!),
+                            Text(
+                              '${parseDates(context.read<ReservationRepository>().reservationList.elementAt(index).startDate!, context.read<ReservationRepository>().reservationList.elementAt(index).endDate!)}',
+                            ),
+                            Text(
+                                '${context.read<ReservationRepository>().reservationList.elementAt(index).finalPrice.toString()}zł'),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 100,
+                          width: 130,
+                          child: Image.asset(
+                              'assets/images/${context.read<ReservationRepository>().reservationList.elementAt(index).roomName!.toLowerCase()}.jpg'),
+                        )
                       ],
                     ),
                   ),

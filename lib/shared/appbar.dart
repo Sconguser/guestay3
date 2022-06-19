@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guestay/shared/divider.dart';
 import 'constants/colours.dart';
 
 AppBar gradientAppBar = AppBar(
@@ -38,6 +39,35 @@ Widget defaultAppBar(BuildContext context) {
       ),
     ),
   );
+}
+
+Widget containerAppBar(BuildContext context, String title, bool showLeading) {
+  return Center(
+    child: Row(
+      children: [
+        leading(context, showLeading),
+        Text(title),
+      ],
+    ),
+  );
+}
+
+Widget leading(BuildContext context, showLeading) {
+  return showLeading
+      ? IconButton(
+          iconSize: 20,
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black54,
+            // size: 30,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        )
+      : SizedBox(
+          height: 20,
+        );
 }
 
 // class MyDefaultAppBar extends StatelessWidget implements PreferredSizeWidget {

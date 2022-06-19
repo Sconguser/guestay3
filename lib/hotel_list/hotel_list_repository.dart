@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:guestay/auth/user.dart';
 import 'package:guestay/hotel_search/hotel_search_repository.dart';
+import 'package:guestay/shared/utils.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/city.dart';
@@ -15,10 +16,23 @@ class HotelListRepository {
 
   bool wasInitialized = false;
 
-  Future<List<Offer>> getOffersForCity(int cityId) async {
-    final queryParameters = {
-      'with_city': cityId.toString(),
-    };
+  Future<List<Offer>> getOffersForCity(
+    int cityId,
+    DateTime? startDate,
+    DateTime? endDate,
+    int? maxPrice,
+  ) async {
+    Map<String, dynamic> queryParameters = {};
+    if (startDate != null && endDate != null) {
+      queryParameters.putIfAbsent(
+          'start_date', () => formatDateWithDates(startDate));
+      queryParameters.putIfAbsent(
+          'end_date', () => formatDateWithDates(endDate));
+    }
+    if (maxPrice != null) {
+      queryParameters.putIfAbsent('max_price', () => maxPrice);
+    }
+    queryParameters.putIfAbsent('with_city', () => cityId.toString());
     try {
       final response = await http.get(
         Uri.https(url, urlIndexOffers, queryParameters),
@@ -29,7 +43,7 @@ class HotelListRepository {
       print("Offer list repository ${response.statusCode}");
       if (response.statusCode == 200 || response.statusCode == 201) {
         _offersList.clear();
-        print(response.body);
+        // print(response.body);
         for (int i = 0; i < jsonDecode(response.body)['data'].length; i++) {
           Offer newOffer = Offer.fromJson(
               response.headers, jsonDecode(response.body)['data'][i]);

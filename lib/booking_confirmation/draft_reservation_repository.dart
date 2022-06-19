@@ -75,6 +75,7 @@ class DraftReservationRepository {
       );
       print("draft reservation get repository ${response.statusCode}");
       if (response.statusCode == 200 || response.statusCode == 201) {
+        _draftReservationList.clear();
         print(response.body);
         for (int i = 0; i < jsonDecode(response.body)['data'].length; i++) {
           DraftReservation newDraftReservation = DraftReservation.fromJson(

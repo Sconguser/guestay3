@@ -6,7 +6,9 @@ import 'package:guestay/home/home_navigator_cubit.dart';
 import 'package:guestay/hotel_search/hotel_search_navigator.dart';
 import 'package:guestay/hotel_search/hotel_search_navigator_cubit.dart';
 import 'package:guestay/hotel_search/hotel_search_repository.dart';
+import 'package:guestay/shared/appbar.dart';
 import 'package:guestay/shared/constants/background.dart';
+import 'package:guestay/shared/divider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../hotel_filters/hotel_filters.dart';
 import '../shared/constants/colours.dart';
@@ -19,22 +21,13 @@ class HotelSearchView extends StatelessWidget {
     HotelSearchRepository hotelSearchRepository =
         context.read<HotelSearchRepository>();
     return Scaffold(
-      appBar: AppBar(
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black54,
-          ),
-        ),
-      ),
       body: Container(
         padding: EdgeInsets.all(30),
-        decoration: loginBackGroundDecoration,
+        decoration: backgroundDecoration,
         child: Column(
           children: [
+            containerAppBar(context, 'Hotel search', true),
+            textFieldDivider,
             SizedBox(height: 20),
             _cityName(hotelSearchRepository.destination, context),
             SizedBox(height: 20),
@@ -233,4 +226,34 @@ class HotelSearchView extends StatelessWidget {
       return SizedBox(height: 1);
     }
   }
+
+  // Widget MaxPriceSlider() {
+  //   return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
+  //     builder: (context, state) {
+  //       return Column(
+  //         children: [
+  //           Text('Maximal price: ${maxPrice ?? 0}'),
+  //           Container(
+  //             width: 1000,
+  //             height: 39,
+  //             child: Slider(
+  //               activeColor: primaryColor,
+  //               min: 0,
+  //               max: 1000,
+  //               value: maxPrice?.toDouble() ?? 0,
+  //               onChanged: (value) {
+  //                 if (minPrice != null && value.toInt() < minPrice!) return;
+  //                 maxPrice = value.toInt();
+  //                 context
+  //                     .read<HotelFiltersBloc>()
+  //                     .add(MaxPriceChanged(maxPrice: value.toInt()));
+  //               },
+  //             ),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+
 }

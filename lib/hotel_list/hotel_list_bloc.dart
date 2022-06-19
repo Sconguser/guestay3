@@ -19,8 +19,8 @@ class HotelListBloc extends Bloc<HotelListEvent, HotelListState> {
         state.copyWith(isOfferListLoading: true),
       );
       try {
-        List<Offer> offers =
-            await hotelListRepository.getOffersForCity(event.cityId);
+        List<Offer> offers = await hotelListRepository.getOffersForCity(
+            event.cityId, event.startDate, event.endDate, event.maxPrice);
         emit(state.copyWith(offers: offers, isOfferListLoading: false));
       } catch (e) {
         print('NIE UDALO SIE ZALADOWAC LISTY HOTELI $e');

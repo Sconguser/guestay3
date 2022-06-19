@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guestay/hotel_search/hotel_search_repository.dart';
+import 'package:guestay/shared/appbar.dart';
 import 'package:guestay/shared/constants/background.dart';
 
 import '../shared/constants/colours.dart';
 import '../shared/divider.dart';
+import '../shared/spinner.dart';
 import '../shared/utils.dart';
 import 'hotel_list_bloc.dart';
 import 'hotel_list_event.dart';
@@ -29,34 +31,34 @@ class HotelListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black54,
-          ),
-        ),
-      ),
       body: BlocProvider(
         create: (context) => HotelListBloc(
           hotelListRepository: context.read<HotelListRepository>(),
-        )..add(LoadOfferList(
-            cityId: context.read<HotelSearchRepository>().destinationId!)),
+        )..add(
+            /// TODO: przeniesc maxprice z filtrow tutaj!!!
+            LoadOfferList(
+              cityId: context.read<HotelSearchRepository>().destinationId!,
+              startDate: context.read<HotelSearchRepository>().startDate,
+              endDate: context.read<HotelSearchRepository>().endDate,
+            ),
+          ),
         child: Container(
           decoration: backgroundDecoration,
           width: 1000,
-          padding: EdgeInsets.fromLTRB(0, 80, 0, 0),
+          padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                containerAppBar(context, 'Search results', true),
+                textFieldDivider,
+                SizedBox(height: 20),
                 _chosenOptionsTile(context),
                 SizedBox(height: 5),
-                _filtersButton(context),
+                Center(
+                  child: _filtersButton(context),
+                ),
                 SizedBox(height: 20),
                 // SizedBox(height: 490, child: hotelsList()),
                 hotelsList(),
@@ -72,8 +74,8 @@ class HotelListView extends StatelessWidget {
     return BlocBuilder<HotelListBloc, HotelListState>(
         builder: (context, state) {
       return state.isOfferListLoading
-          ? CircularProgressIndicator()
-          : SizedBox(height: 490, child: hotelBuilder());
+          ? defaultGuestaySpinner()
+          : SizedBox(height: 520, child: hotelBuilder());
     });
   }
 
@@ -139,33 +141,41 @@ class HotelListView extends StatelessWidget {
   Widget _chosenOptionsTile(BuildContext context) {
     HotelSearchRepository hotelSearchRepository =
         context.read<HotelSearchRepository>();
-    return Container(
-      color: primaryColor,
-      width: 500,
-      height: 50,
-      child: Column(
-        children: [
-          Text(hotelSearchRepository.destination != null
-              ? hotelSearchRepository.destination!
-              : 'Error'),
-          textFieldDivider,
-          Row(
-            children: [
-              Text(formatDate(hotelSearchRepository)),
-              Text(formatGuestNumber(hotelSearchRepository)),
-            ],
-          ),
-        ],
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        color: Colors.white,
+        width: 500,
+        height: 70,
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: Column(
+          children: [
+            SizedBox(height: 10),
+            Text(hotelSearchRepository.destination != null
+                ? hotelSearchRepository.destination!
+                : 'Error'),
+            textFieldDivider,
+            Row(
+              children: [
+                Text('Dates: ${formatDate(hotelSearchRepository)}'),
+                SizedBox(width: 15),
+                Text('Guests: ${formatGuestNumber(hotelSearchRepository)}'),
+              ],
+            ),
+            SizedBox(height: 10),
+          ],
+        ),
       ),
     );
   }
 
   Widget _filtersButton(BuildContext context) {
     return ElevatedButton(
+      style: ElevatedButton.styleFrom(primary: primaryColor, elevation: 0),
       onPressed: () {
         _filtersButtonPressed(context);
       },
-      child: Text('Filters'),
+      child: Text('Select filters'),
     );
   }
 

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guestay/shared/constants/background.dart';
 import 'package:guestay/shared/constants/colours.dart';
 import 'package:guestay/shared/divider.dart';
+import 'package:guestay/shared/spinner.dart';
 
 import '../../auth_cubit.dart';
 import '../sign_up_bloc.dart';
@@ -119,7 +120,7 @@ class SignUpView extends StatelessWidget {
   Widget _googleRegister() {
     return BlocBuilder<SignUpBloc, SignUpState>(builder: (context, state) {
       return state.formSubmissionStatus is FormSubmitting
-          ? CircularProgressIndicator()
+          ? defaultGuestaySpinner()
           : ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: SizedBox(
@@ -233,7 +234,7 @@ class SignUpView extends StatelessWidget {
   Widget _signUpButton() {
     return BlocBuilder<SignUpBloc, SignUpState>(builder: (context, state) {
       return state.formSubmissionStatus is FormSubmitting
-          ? const CircularProgressIndicator()
+          ? defaultGuestaySpinner()
           : ClipRRect(
               borderRadius: BorderRadius.circular(30),
               child: SizedBox(

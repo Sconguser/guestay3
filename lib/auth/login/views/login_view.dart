@@ -11,6 +11,7 @@ import 'package:guestay/shared/constants/colours.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../shared/divider.dart';
+import '../../../shared/spinner.dart';
 import '../../auth_cubit.dart';
 import '../../sign_up/sign_up_bloc.dart';
 import '../login_bloc.dart';
@@ -42,24 +43,31 @@ class LoginView extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(30),
           decoration: loginBackGroundDecoration,
-          child: Column(
-            children: [
-              logoImage(context),
-              SizedBox(height: 30),
-              _loginForm(),
-              SizedBox(height: 20),
-              _loginButton(),
-              _signUpButton(context),
-              SizedBox(
-                height: 20,
+          child: CustomScrollView(
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(
+                  children: [
+                    logoImage(context),
+                    SizedBox(height: 30),
+                    _loginForm(),
+                    SizedBox(height: 20),
+                    _loginButton(),
+                    _signUpButton(context),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text('or sign in with'),
+                    SizedBox(height: 10),
+                    _googleLogin(),
+                    SizedBox(height: 5),
+                    Text(
+                        'By signing in, I agree with Terms of Use and Privacy Policy',
+                        style: TextStyle(fontSize: 9))
+                  ],
+                ),
               ),
-              Text('or sign in with'),
-              SizedBox(height: 10),
-              _googleLogin(),
-              SizedBox(height: 5),
-              Text(
-                  'By signing in, I agree with Terms of Use and Privacy Policy',
-                  style: TextStyle(fontSize: 9))
             ],
           ),
         ),
@@ -127,6 +135,7 @@ class LoginView extends StatelessWidget {
           hintText: 'Password',
           hintStyle: TextStyle(fontWeight: FontWeight.bold),
         ),
+        obscureText: true,
         validator: (value) => state.isValidPassword ? null : incorrectPassword,
         onChanged: (value) => context
             .read<LoginBloc>()
@@ -138,7 +147,7 @@ class LoginView extends StatelessWidget {
   Widget _loginButton() {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return state.formSubmissionStatus is FormSubmitting
-          ? CircularProgressIndicator()
+          ? defaultGuestaySpinner()
           : ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: SizedBox(
@@ -175,7 +184,7 @@ class LoginView extends StatelessWidget {
   Widget _googleLogin() {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return state.formSubmissionStatus is FormSubmitting
-          ? CircularProgressIndicator()
+          ? defaultGuestaySpinner()
           : ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: SizedBox(

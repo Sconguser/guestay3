@@ -7,6 +7,7 @@ import 'package:guestay/shared/bottom_navigation_bar.dart';
 import 'package:guestay/shared/appbar.dart';
 import 'package:guestay/shared/constants/background.dart';
 import 'package:guestay/shared/constants/colours.dart';
+import 'package:guestay/shared/spinner.dart';
 
 import '../hotel_search/hotel_search_repository.dart';
 import '../models/city.dart';
@@ -94,7 +95,7 @@ class HomeView extends StatelessWidget {
   Widget destinationsList() {
     return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
       return state.isCityListLoading
-          ? CircularProgressIndicator()
+          ? defaultGuestaySpinner()
           : SizedBox(height: 150, child: destinationBuilder());
     });
   }

@@ -32,7 +32,7 @@ class ReservationRepository {
           body: jsonEncode(<String, dynamic>{
             "reservation": <String, dynamic>{
               'draft_reservation_id': draftReservationId,
-              'payment_type_id': paymentTypeId,
+              'payment_type_id': 1,
               'price': price,
             },
           }));
@@ -65,6 +65,7 @@ class ReservationRepository {
       print("reservation get repository ${response.statusCode}");
       if (response.statusCode == 200 || response.statusCode == 201) {
         print(response.body);
+        reservationList.clear();
         for (int i = 0; i < jsonDecode(response.body)['data'].length; i++) {
           Reservation newReservation = Reservation.fromJson(
               response.headers, jsonDecode(response.body)['data'][i]);

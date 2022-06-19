@@ -30,8 +30,6 @@ class UserDraftReservationsNavigator extends StatelessWidget {
           return Navigator(
             pages: [
               MaterialPage(child: UserDraftReservationsView()),
-              if (state == UserDraftReservationsNavigatorState.defaultView)
-                MaterialPage(child: (UserDraftReservationsView())),
               if (state == UserDraftReservationsNavigatorState.finishBooking)
                 MaterialPage(child: (PaymentChoiceNavigator())),
               // if (state == RoomListNavigatorState.paymentChoiceView)

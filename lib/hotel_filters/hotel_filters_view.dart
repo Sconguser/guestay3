@@ -1,11 +1,15 @@
 import 'package:dart_numerics/dart_numerics.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guestay/hotel_filters/hotel_filters_bloc.dart';
 import 'package:guestay/hotel_filters/hotel_filters_state.dart';
+import 'package:guestay/shared/constants/background.dart';
 
 import '../hotel_list/hotel_list_navigator_cubit.dart';
+import '../shared/appbar.dart';
 import '../shared/constants/colours.dart';
+import '../shared/divider.dart';
 import 'hotel_filters_event.dart';
 
 bool wifi = false;
@@ -19,8 +23,11 @@ bool entirePlace = false;
 bool privateRoom = false;
 bool sharedRoom = false;
 bool hotelRoom = false;
-int? minPrice;
-int? maxPrice;
+int? minPrice = 0;
+int? maxPrice = 0;
+
+MainAxisAlignment defaultMainAxisAlignment = MainAxisAlignment.spaceBetween;
+Color checkBoxColor = primaryColor;
 
 class HotelFiltersView extends StatelessWidget {
   const HotelFiltersView({Key? key}) : super(key: key);
@@ -28,23 +35,27 @@ class HotelFiltersView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black54,
-          ),
-        ),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.transparent,
+      //   leading: InkWell(
+      //     onTap: () {
+      //       Navigator.pop(context);
+      //     },
+      //     child: Icon(
+      //       Icons.arrow_back_ios,
+      //       color: Colors.black54,
+      //     ),
+      //   ),
+      // ),
       body: BlocProvider(
         create: (context) => HotelFiltersBloc(),
         child: Container(
+          decoration: backgroundDecoration,
           padding: EdgeInsets.all(30),
           child: Column(
             children: [
+              containerAppBar(context, 'Filters', true),
+              textFieldDivider,
               WifiCheckBox(),
               FreeParkingCheckBox(),
               FreeCancellationCheckBox(),
@@ -56,8 +67,11 @@ class HotelFiltersView extends StatelessWidget {
               PrivateRoomCheckBox(),
               SharedRoomCheckBox(),
               HotelRoomCheckBox(),
-              MinPriceTextBox(),
-              MaxPriceTextBox(),
+              textFieldDivider,
+              // MinPriceTextBox(),
+              // MinPriceSlider(),
+              // MaxPriceTextBox(),
+              MaxPriceSlider(),
               _confirmButton(context),
             ],
           ),
@@ -71,12 +85,11 @@ Widget WifiCheckBox() {
   return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
     builder: (context, state) {
       return Row(
+        mainAxisAlignment: defaultMainAxisAlignment,
         children: [
           Text('Wifi'),
-          SizedBox(
-            width: 50,
-          ),
           Checkbox(
+            activeColor: checkBoxColor,
             onChanged: (bool? value) {
               wifi = !wifi;
               context
@@ -95,12 +108,14 @@ Widget FreeParkingCheckBox() {
   return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
     builder: (context, state) {
       return Row(
+        mainAxisAlignment: defaultMainAxisAlignment,
         children: [
           Text('Free parking'),
-          SizedBox(
-            width: 50,
-          ),
+          // SizedBox(
+          //   width: 50,
+          // ),
           Checkbox(
+            activeColor: checkBoxColor,
             onChanged: (bool? value) {
               freeParking = !freeParking;
               context
@@ -119,12 +134,14 @@ Widget FreeCancellationCheckBox() {
   return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
     builder: (context, state) {
       return Row(
+        mainAxisAlignment: defaultMainAxisAlignment,
         children: [
           Text('Free cancellation'),
-          SizedBox(
-            width: 50,
-          ),
+          // SizedBox(
+          //   width: 50,
+          // ),
           Checkbox(
+            activeColor: checkBoxColor,
             onChanged: (bool? value) {
               freeCancellation = !freeCancellation;
               context.read<HotelFiltersBloc>().add(FreeCancellationChanged(
@@ -142,12 +159,14 @@ Widget KitchenCheckBox() {
   return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
     builder: (context, state) {
       return Row(
+        mainAxisAlignment: defaultMainAxisAlignment,
         children: [
           Text('Kitchen'),
-          SizedBox(
-            width: 50,
-          ),
+          // SizedBox(
+          //   width: 50,
+          // ),
           Checkbox(
+            activeColor: checkBoxColor,
             onChanged: (bool? value) {
               kitchen = !kitchen;
               context
@@ -166,12 +185,14 @@ Widget WashingMachineCheckBox() {
   return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
     builder: (context, state) {
       return Row(
+        mainAxisAlignment: defaultMainAxisAlignment,
         children: [
           Text('Washing machine'),
-          SizedBox(
-            width: 50,
-          ),
+          // SizedBox(
+          //   width: 50,
+          // ),
           Checkbox(
+            activeColor: checkBoxColor,
             onChanged: (bool? value) {
               washingMachine = !washingMachine;
               context.read<HotelFiltersBloc>().add(WashingMachineChanged(
@@ -189,12 +210,14 @@ Widget BreakfastCheckBox() {
   return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
     builder: (context, state) {
       return Row(
+        mainAxisAlignment: defaultMainAxisAlignment,
         children: [
           Text('Breakfast'),
-          SizedBox(
-            width: 50,
-          ),
+          // SizedBox(
+          //   width: 50,
+          // ),
           Checkbox(
+            activeColor: checkBoxColor,
             onChanged: (bool? value) {
               breakfast = !breakfast;
               context
@@ -213,17 +236,19 @@ Widget ACCheckBox() {
   return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
     builder: (context, state) {
       return Row(
+        mainAxisAlignment: defaultMainAxisAlignment,
         children: [
           Text('AC'),
-          SizedBox(
-            width: 50,
-          ),
+          // SizedBox(
+          //   width: 50,
+          // ),
           Checkbox(
+            activeColor: checkBoxColor,
             onChanged: (bool? value) {
-              breakfast = !breakfast;
+              ac = !ac;
               context.read<HotelFiltersBloc>().add(ACChanged(ac: value ?? !ac));
             },
-            value: breakfast,
+            value: ac,
           ),
         ],
       );
@@ -235,12 +260,14 @@ Widget EntirePlaceCheckBox() {
   return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
     builder: (context, state) {
       return Row(
+        mainAxisAlignment: defaultMainAxisAlignment,
         children: [
           Text('Entire place'),
-          SizedBox(
-            width: 50,
-          ),
+          // SizedBox(
+          //   width: 50,
+          // ),
           Checkbox(
+            activeColor: checkBoxColor,
             onChanged: (bool? value) {
               entirePlace = !entirePlace;
               context
@@ -259,12 +286,14 @@ Widget PrivateRoomCheckBox() {
   return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
     builder: (context, state) {
       return Row(
+        mainAxisAlignment: defaultMainAxisAlignment,
         children: [
           Text('Private room'),
-          SizedBox(
-            width: 50,
-          ),
+          // SizedBox(
+          //   width: 50,
+          // ),
           Checkbox(
+            activeColor: checkBoxColor,
             onChanged: (bool? value) {
               privateRoom = !privateRoom;
               context
@@ -283,12 +312,11 @@ Widget SharedRoomCheckBox() {
   return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
     builder: (context, state) {
       return Row(
+        mainAxisAlignment: defaultMainAxisAlignment,
         children: [
           Text('Shared room'),
-          SizedBox(
-            width: 50,
-          ),
           Checkbox(
+            activeColor: checkBoxColor,
             onChanged: (bool? value) {
               sharedRoom = !sharedRoom;
               context
@@ -307,12 +335,11 @@ Widget HotelRoomCheckBox() {
   return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
     builder: (context, state) {
       return Row(
+        mainAxisAlignment: defaultMainAxisAlignment,
         children: [
           Text('Hotel room'),
-          SizedBox(
-            width: 50,
-          ),
           Checkbox(
+            activeColor: checkBoxColor,
             onChanged: (bool? value) {
               hotelRoom = !hotelRoom;
               context
@@ -358,6 +385,44 @@ Widget MinPriceTextBox() {
   );
 }
 
+Widget MinPriceSlider() {
+  return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
+    builder: (context, state) {
+      return Column(
+        // mainAxisAlignment: defaultMainAxisAlignment,
+        children: [
+          Text('Minimal price: ${minPrice ?? 0}'),
+          // SizedBox(
+          //   width: 50,
+          // ),
+          Container(
+            width: 1000,
+            height: 37,
+            child: Slider(
+              activeColor: primaryColor,
+              min: 0,
+              max: 1000,
+              value: minPrice?.toDouble() ?? 0,
+              onChanged: (value) {
+                if (maxPrice != null && value.toInt() > maxPrice!) {
+                  maxPrice = value.toInt();
+                  context
+                      .read<HotelFiltersBloc>()
+                      .add(MaxPriceChanged(maxPrice: value.toInt()));
+                }
+                minPrice = value.toInt();
+                context
+                    .read<HotelFiltersBloc>()
+                    .add(MinPriceChanged(minPrice: value.toInt()));
+              },
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 Widget MaxPriceTextBox() {
   return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
     builder: (context, state) {
@@ -381,6 +446,35 @@ Widget MaxPriceTextBox() {
               onChanged: (value) => context
                   .read<HotelFiltersBloc>()
                   .add(MaxPriceChanged(maxPrice: int.parse(value))),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Widget MaxPriceSlider() {
+  return BlocBuilder<HotelFiltersBloc, HotelFiltersState>(
+    builder: (context, state) {
+      return Column(
+        children: [
+          Text('Maximal price: ${maxPrice ?? 0}'),
+          Container(
+            width: 1000,
+            height: 39,
+            child: Slider(
+              activeColor: primaryColor,
+              min: 0,
+              max: 1000,
+              value: maxPrice?.toDouble() ?? 0,
+              onChanged: (value) {
+                if (minPrice != null && value.toInt() < minPrice!) return;
+                maxPrice = value.toInt();
+                context
+                    .read<HotelFiltersBloc>()
+                    .add(MaxPriceChanged(maxPrice: value.toInt()));
+              },
             ),
           ),
         ],

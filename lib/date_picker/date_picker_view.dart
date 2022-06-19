@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guestay/hotel_search/hotel_search_navigator_cubit.dart';
 import 'package:guestay/hotel_search/hotel_search_repository.dart';
+import 'package:guestay/shared/appbar.dart';
+import 'package:guestay/shared/constants/background.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../shared/constants/colours.dart';
+import '../shared/divider.dart';
 import 'date_picker_cubit.dart';
 
 DateTime? startDate;
@@ -19,14 +22,19 @@ class DatePickerView extends StatelessWidget {
         context.read<HotelSearchRepository>();
 
     return Scaffold(
-        appBar: AppBar(),
+        // appBar: AppBar(),
         body: Column(
-          children: [
-            Container(
-                padding: EdgeInsets.all(30),
-                width: 500,
-                height: 600,
-                child: SfDateRangePicker(
+      children: [
+        Container(
+            decoration: backgroundDecoration,
+            padding: EdgeInsets.all(30),
+            width: 500,
+            height: 600,
+            child: Column(
+              children: [
+                containerAppBar(context, 'Pick dates', true),
+                textFieldDivider,
+                SfDateRangePicker(
                   onSelectionChanged: (date) {
                     print(date.value.startDate);
                     startDate = date.value.startDate;
@@ -41,10 +49,12 @@ class DatePickerView extends StatelessWidget {
                           : PickerDateRange(
                               DateTime.now().subtract(const Duration(days: 4)),
                               DateTime.now().add(const Duration(days: 3))),
-                )),
-            _confirmButton(context),
-          ],
-        ));
+                ),
+              ],
+            )),
+        _confirmButton(context),
+      ],
+    ));
   }
 
   Widget _confirmButton(BuildContext context) {

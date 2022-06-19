@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guestay/guest_picker/guest_picker_event.dart';
+import 'package:guestay/shared/appbar.dart';
+import 'package:guestay/shared/constants/background.dart';
+import 'package:guestay/shared/divider.dart';
 
 import '../hotel_search/hotel_search_navigator_cubit.dart';
 import '../hotel_search/hotel_search_repository.dart';
@@ -22,13 +25,15 @@ class GuestPicker extends StatelessWidget {
         context.read<HotelSearchRepository>();
 
     return Scaffold(
-      appBar: AppBar(),
       body: BlocProvider(
         create: (context) => GuestPickerBloc(),
         child: Container(
+          decoration: backgroundDecoration,
           padding: EdgeInsets.all(30),
           child: Column(
             children: [
+              containerAppBar(context, 'Pick number of guests', true),
+              textFieldDivider,
               _adultPicker(),
               SizedBox(height: 20),
               _childrenPicker(),
@@ -46,7 +51,7 @@ class GuestPicker extends StatelessWidget {
   }
 
   final TextStyle style = const TextStyle(
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: FontWeight.bold,
   );
 

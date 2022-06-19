@@ -12,6 +12,7 @@ class HotelFiltersState {
   bool? privateRoom;
   bool? sharedRoom;
   bool? hotelRoom;
+  bool? ac;
   int? minPrice;
   int? maxPrice;
 
@@ -26,6 +27,7 @@ class HotelFiltersState {
     this.privateRoom = false,
     this.sharedRoom = false,
     this.hotelRoom = false,
+    this.ac = false,
     this.maxPrice = numerics.int64MaxValue,
     this.minPrice = numerics.int64MinValue,
   });
@@ -40,6 +42,7 @@ class HotelFiltersState {
     bool? privateRoom,
     bool? sharedRoom,
     bool? hotelRoom,
+    bool? ac,
     int? maxPrice,
     int? minPrice,
   }) {
@@ -50,6 +53,7 @@ class HotelFiltersState {
       kitchen: kitchen ?? this.kitchen,
       washingMachine: washingMachine ?? this.washingMachine,
       breakfast: breakfast ?? this.breakfast,
+      ac: ac ?? this.ac,
       entirePlace: entirePlace ?? this.entirePlace,
       privateRoom: privateRoom ?? this.privateRoom,
       sharedRoom: sharedRoom ?? this.sharedRoom,

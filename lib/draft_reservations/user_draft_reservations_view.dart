@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guestay/draft_reservations/user_draft_reservations_navigator_cubit.dart';
+import 'package:guestay/shared/appbar.dart';
 import 'package:guestay/shared/constants/background.dart';
+import 'package:guestay/shared/divider.dart';
 
 import '../auth/auth_repository.dart';
 import '../booking_confirmation/draft_reservation_repository.dart';
+import '../shared/spinner.dart';
+import '../shared/utils.dart';
 import 'draft_reservations_bloc.dart';
 import 'draft_reservations_event.dart';
 import 'draft_reservations_state.dart';
@@ -24,15 +28,14 @@ class UserDraftReservationsView extends StatelessWidget {
         child: Container(
           decoration: backgroundDecoration,
           width: 1000,
-          padding: EdgeInsets.fromLTRB(0, 80, 0, 0),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                draftReservationList(),
-              ],
-            ),
+          padding: EdgeInsets.fromLTRB(15, 50, 15, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              containerAppBar(context, 'Your unfinished reservations', false),
+              textFieldDivider,
+              draftReservationList(),
+            ],
           ),
         ),
       ),
@@ -43,8 +46,8 @@ class UserDraftReservationsView extends StatelessWidget {
     return BlocBuilder<DraftReservationBloc, DraftReservationsState>(
         builder: (context, state) {
       return state.isDraftReservationListLoading
-          ? CircularProgressIndicator()
-          : SizedBox(height: 490, child: draftReservationBuilder());
+          ? defaultGuestaySpinner()
+          : SizedBox(height: 670, child: draftReservationBuilder());
     });
   }
 
@@ -95,14 +98,41 @@ class UserDraftReservationsView extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Center(
-                    child: Column(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(context
-                            .read<DraftReservationRepository>()
-                            .draftReservationList
-                            .elementAt(index)
-                            .roomName!),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(context
+                                .read<DraftReservationRepository>()
+                                .draftReservationList
+                                .elementAt(index)
+                                .roomName!),
+                            Text(parseDates(
+                                context
+                                    .read<DraftReservationRepository>()
+                                    .draftReservationList
+                                    .elementAt(index)
+                                    .startDate!,
+                                context
+                                    .read<DraftReservationRepository>()
+                                    .draftReservationList
+                                    .elementAt(index)
+                                    .endDate!)),
+                            Text(
+                                '${context.read<DraftReservationRepository>().draftReservationList.elementAt(index).finalPrice} zł'),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 100,
+                          width: 130,
+                          child: Image.asset(
+                              'assets/images/${context.read<DraftReservationRepository>().draftReservationList.elementAt(index).roomName!.toLowerCase()}.jpg'),
+                        )
                       ],
                     ),
                   ),

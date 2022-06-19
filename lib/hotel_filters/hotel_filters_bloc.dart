@@ -43,7 +43,9 @@ class HotelFiltersBloc extends Bloc<HotelFiltersEvent, HotelFiltersState> {
     on<HotelRoomChanged>((event, emit) {
       emit(state.copyWith(hotelRoom: event.hotelRoom));
     });
-
+    on<ACChanged>((event, emit) {
+      emit(state.copyWith(ac: event.ac));
+    });
     on<MinPriceChanged>((event, emit) {
       emit(state.copyWith(minPrice: event.minPrice));
     });

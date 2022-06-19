@@ -16,8 +16,8 @@ class RoomListBloc extends Bloc<RoomListEvent, RoomListState> {
         state.copyWith(isRoomListLoading: true),
       );
       try {
-        List<Room> roomList =
-            await roomListRepository.getRoomsForOffer(event.offerId);
+        List<Room> roomList = await roomListRepository.getRoomsForOffer(
+            event.offerId, event.hotelFilters);
         emit(state.copyWith(rooms: roomList, isRoomListLoading: false));
       } catch (e) {
         print('NIE UDALO SIE ZALADOWAC LISTY POKOJOW $e');

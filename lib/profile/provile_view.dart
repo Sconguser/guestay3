@@ -3,9 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guestay/profile/profile_bloc.dart';
 import 'package:guestay/profile/profile_event.dart';
 import 'package:guestay/profile/profile_state.dart';
+import 'package:guestay/shared/appbar.dart';
+import 'package:guestay/shared/constants/background.dart';
 
 import '../auth/auth_cubit.dart';
 import '../session_cubit.dart';
+import '../shared/constants/colours.dart';
+import '../shared/divider.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -19,9 +23,20 @@ class ProfileView extends StatelessWidget {
             isCurrentUser: sessionCubit.isCurrentUserSelected,
             sessionCubit: sessionCubit),
         child: Scaffold(
-            backgroundColor: Colors.blue,
-            appBar: _appBar(),
-            body: _profilePage()));
+            // backgroundColor: Colors.blue,
+            // appBar: _appBar(),
+            body: Container(
+          decoration: backgroundDecoration,
+          padding: EdgeInsets.all(30),
+          child: Column(
+            children: [
+              // containerAppBar(context, 'Profile', false),
+              _appBar(),
+              textFieldDivider,
+              _profilePage(),
+            ],
+          ),
+        )));
   }
 
   PreferredSize _appBar() {
@@ -29,15 +44,15 @@ class ProfileView extends StatelessWidget {
     return PreferredSize(
       preferredSize: Size.fromHeight(appBarHeight),
       child: BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-        return AppBar(
-          title: Text('Profile view'),
-          actions: [
+        return Row(
+          children: [
             if (state.isCurrentUser)
               IconButton(
                   onPressed: () {
                     context.read<ProfileBloc>().add(SignOut());
                   },
-                  icon: Icon(Icons.logout))
+                  icon: Icon(Icons.logout)),
+            Text('Your profile')
           ],
         );
       }),
@@ -137,7 +152,12 @@ class ProfileView extends StatelessWidget {
   Widget _saveProfileChangesButton() {
     return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
       return ElevatedButton(
-          onPressed: () {}, child: Text('Save profile changes'));
+          style: ElevatedButton.styleFrom(primary: primaryColor, elevation: 0),
+          onPressed: () {},
+          child: Text(
+            'Save profile changes',
+            style: TextStyle(color: Colors.black),
+          ));
     });
   }
 }
